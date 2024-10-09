@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Média Peso e Altura</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: #2f2f2f;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px #0000001a;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .segment h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #2f2f2f;
+            color: white;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #242424;
+        }
+
+        #resultado {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .btn-voltar {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #ffffff;
+            color: #2f2f2f;
+            border: 1px solid #2f2f2f;
+            font-weight: bold;
+        }
+
+        .btn-voltar:hover {
+            background-color: #e7e7e7;
+        }
+
+        .tabela-pessoas {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="btn btn-voltar">Voltar ao Hub</a> 
+    <div class="container">
+        <div class="card-container">
+            <form class="card">
+                <div class="segment">
+                    <h1>Média Peso e Altura</h1>
+                </div>
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" placeholder="Ex: João Silva">
+                
+                <label for="altura">Altura (m)</label>
+                <input type="number" id="altura" placeholder="Ex: 1.75" step="0.01">
+                
+                <label for="peso">Peso (kg)</label>
+                <input type="number" id="peso" placeholder="Ex: 70" step="0.1">
+                
+                <button type="button" onclick="cadastrarPessoa()">Cadastrar</button>
+            </form>
+        </div>
+
+        <div class="container tabela-pessoas mt-5" style="display: none;">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Altura (m)</th>
+                        <th>Peso (kg)</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-pessoas">
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Média</th>
+                        <td id="media-altura">-</td>
+                        <td id="media-peso">-</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let pessoas = [];
+
+        function cadastrarPessoa() {
+            let nome = document.getElementById('nome').value;
+            let altura = parseFloat(document.getElementById('altura').value);
+            let peso = parseFloat(document.getElementById('peso').value);
+
+            if (nome && altura && peso) {
+                let pessoa = { nome, altura, peso };
+                pessoas.push(pessoa);
+
+                atualizarTabela();
+                calcularMedias();
+                document.querySelector('.tabela-pessoas').style.display = 'block';
+            } else {
+                alert("Por favor, preencha todos os campos.");
+            }
+        }
+
+        function atualizarTabela() {
+            let tabela = document.getElementById('tabela-pessoas');
+            tabela.innerHTML = ''; 
+
+            pessoas.forEach(pessoa => {
+                let linha = `<tr>
+                    <td>${pessoa.nome}</td>
+                    <td>${pessoa.altura.toFixed(2)}</td>
+                    <td>${pessoa.peso.toFixed(1)}</td>
+                </tr>`;
+                tabela.innerHTML += linha;
+            });
+        }
+
+        function calcularMedias() {
+            let totalAltura = 0, totalPeso = 0;
+
+            pessoas.forEach(pessoa => {
+                totalAltura += pessoa.altura;
+                totalPeso += pessoa.peso;
+            });
+
+            let mediaAltura = totalAltura / pessoas.length;
+            let mediaPeso = totalPeso / pessoas.length;
+
+            document.getElementById('media-altura').innerHTML = mediaAltura.toFixed(2);
+            document.getElementById('media-peso').innerHTML = mediaPeso.toFixed(1);
+        }
+    </script>
+</body>
+</html>
